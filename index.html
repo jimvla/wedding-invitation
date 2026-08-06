@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Γάμος Δημήτρη & Μαρίας</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        section {
+            padding: 40px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-bottom: 1px solid #ddd;
+        }
+        /* Αφαίρεση της γραμμής από το τελευταίο section */
+        section:last-child {
+            border-bottom: none; 
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .map-container {
+            margin-top: 30px;
+        }
+        iframe {
+            width: 100%;
+            height: 300px;
+            border: 0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 40px;
+            text-align: left;
+        }
+        input, textarea, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Σελίδα 1: Εισαγωγή -->
+    <section>
+        <img src="_images/1.svg" alt="Προσκλητήριο Μέρος 1">
+    </section>
+
+    <!-- Σελίδα 2: Λεπτομέρειες -->
+    <section>
+        <img src="_images/2.svg" alt="Προσκλητήριο Μέρος 2">
+    </section>
+
+    <!-- Σελίδα 3: Τοποθεσίες & RSVP -->
+    <section>
+        <img src="page3.png" alt="Προσκλητήριο Μέρος 3">
+        
+        <!-- Χάρτης 1: Εκκλησία -->
+        <div class="map-container">
+            <h3>Τοποθεσία Μυστηρίου</h3>
+            <!-- Αντικαταστήστε το src με το δικό σας embed link -->
+            <iframe src="https://www.google.com/maps/embed?pb=..." allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <!-- Χάρτης 2: Δεξίωση -->
+        <div class="map-container">
+            <h3>Τοποθεσία Δεξίωσης</h3>
+            <!-- Αντικαταστήστε το src με το δικό σας embed link -->
+            <iframe src="https://www.google.com/maps/embed?pb=..." allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <!-- Φόρμα RSVP
+        <form action="YOUR_FORMSPREE_ENDPOINT" method="POST">
+            <h3 style="text-align: center;">Επιβεβαίωση Παρουσίας</h3>
+            <label for="name">Ονοματεπώνυμο:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="guests">Αριθμός Ατόμων:</label>
+            <input type="number" id="guests" name="guests" min="1" required>
+
+            <button type="submit">Αποστολή</button>
+        </form> -->
+    </section>
+
+</body>
+</html>
