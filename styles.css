@@ -47,7 +47,7 @@ main::before {
     background-size: contain;
     background-repeat: no-repeat;
     transform: rotate(165deg);
-    opacity: 0.22;
+    opacity: 0.3;
 }
 
 section {
