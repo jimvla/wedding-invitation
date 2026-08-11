@@ -39,15 +39,15 @@ main::before {
     position: fixed;
     left: -25vw;
     top: -8vh;
-    width: 70vw;
-    height: 70vw;
+    width: 80vw;
+    height: 80vw;
     z-index: 0;
     pointer-events: none;
     background-image: url('https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/floral.png');
     background-size: contain;
     background-repeat: no-repeat;
     transform: rotate(165deg);
-    opacity: 0.3;
+    opacity: 0.33;
 }
 
 section {
@@ -265,6 +265,11 @@ iframe {
 }
 
 @media (max-width: 800px) {
+    /* ΝΕΟΣ ΚΩΔΙΚΑΣ: Απενεργοποίηση του scroll snapping στα κινητά */
+    body {
+        scroll-snap-type: none;
+    }
+    
     section {
         min-height: auto;
         height: auto;
