@@ -37,7 +37,7 @@ main {
 main::before {
     content: "";
     position: fixed;
-    left: -25vw;
+    left: -30vw;
     top: -8vh;
     width: 80vw;
     height: 80vw;
