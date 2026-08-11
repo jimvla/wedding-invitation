@@ -271,6 +271,12 @@ iframe {
         padding: 4rem 0;
     }
 
+    /* ΝΕΟΣ ΚΩΔΙΚΑΣ: Κρατάει την 1η οθόνη στο 100% του ύψους της συσκευής */
+    section:first-of-type {
+        min-height: 100dvh; 
+        height: 100dvh;
+    }
+
     .text-content {
         padding: 1.4rem 1.2rem;
         margin: 0 0.85rem;
