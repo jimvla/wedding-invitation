@@ -1,9 +1,11 @@
 :root {
     color-scheme: dark;
-    font-family: 'GFS Didot', Georgia, "Times New Roman", serif;
+    font-family: 'GFS Didot', Georgia, 'Times New Roman', serif;
     scroll-behavior: smooth;
-    --text-color: #664523; /* updated brown */
-    --panel-text: #664523; /* match headings as requested */
+    --base-font-size: 18px;
+    --text-color: #664523;
+    --accent: #a07141;
+    --muted: rgba(102, 69, 35, 0.85);
 }
 
 * {
@@ -13,60 +15,183 @@
 html, body {
     margin: 0;
     min-height: 100%;
-    background: #000;
+    background: #e6dfd5;
     color: var(--text-color);
     overflow-x: hidden;
 }
 
 body {
+    font-size: var(--base-font-size);
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 main {
+    position: relative;
     min-height: 100vh;
+}
+
+main::before {
+    content: "";
+    position: fixed;
+    left: -25vw;
+    top: -8vh;
+    width: 70vw;
+    height: 70vw;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url('_images/floral.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(165deg);
+    opacity: 0.22;
 }
 
 section {
     position: relative;
     min-height: 100vh;
+    height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     scroll-snap-align: start;
-}
-
-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    pointer-events: none;
-}
-
-img.cover-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: contain;
-    object-position: center;
-    opacity: 0.98;
-    filter: saturate(1.05) contrast(1.05);
+    scroll-snap-stop: always;
+    padding: 2.5rem 0;
+    overflow: hidden;
 }
 
 .content {
     position: relative;
     z-index: 1;
-    padding: 24px;
     width: 100%;
     max-width: 1080px;
-    animation: fadeInUp 1s ease;
+    padding: 28px;
+    animation: fadeInUp 1.5s ease;
+}
+
+.text-content {
+    background: transparent;
+    padding: 1.75rem 1.5rem;
+    max-width: 920px;
+    margin: 0 1rem;
+    text-align: center;
+    color: var(--text-color);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.text-content > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-content .muted {
+    opacity: 0.95;
+    margin-bottom: 0.25rem;
+    color: var(--muted);
+    font-variant: small-caps;
+    letter-spacing: 0.12em;
+}
+
+.text-content h1,
+.text-content h2,
+.text-content h3 {
+    color: var(--text-color);
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
+}
+
+.text-content h1 {
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    margin-bottom: 0.25rem;
+}
+
+.text-content h2 {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    margin-bottom: 0.5rem;
+}
+
+.text-content h1::after {
+    content: "";
+    display: block;
+    width: 52px;
+    height: 2px;
+    margin: 1rem auto 0;
+    background: rgba(166, 109, 65, 0.35);
+    border-radius: 1px;
+}
+
+.text-content h3 {
+    font-size: 1.05rem;
+    margin-top: 1rem;
+}
+
+.text-content p {
+    margin: 0.6rem 0;
+    line-height: 1.65;
+    color: rgba(102, 69, 35, 0.95);
+    max-width: 64ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-divider {
+    border: none;
+    height: 1px;
+    background: rgba(166, 109, 65, 0.35);
+    margin: 1.2rem auto;
+    width: 60%;
+    max-width: 400px;
+}
+
+.family-group {
+    margin: 1rem auto;
+    max-width: 36rem;
+}
+
+.family-group h3,
+.family-group p {
+    text-align: center;
+}
+
+.names-block {
+    line-height: 1;
+}
+
+.names-block .name-line {
+    display: block;
+    font-size: clamp(2.8rem, 7vw, 4.2rem);
+}
+
+.names-block .amp {
+    display: block;
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+    opacity: 0.95;
+    margin: 0.7rem 0 0;
+}
+
+.text-content .date {
+    display: block;
+    margin-top: 1.6rem;
+    font-size: 1.2rem;
+    /* color: var(--muted); */
+    letter-spacing: 0.03em;
+}
+
+.text-content .venue {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 1.2rem;
+}
+
+.text-content .rsvp {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--muted);
 }
 
 .content.location-content {
@@ -74,51 +199,11 @@ img.cover-image {
     padding: 1.5rem 1rem;
 }
 
-.content.location-content h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: var(--text-color);
-    font-family: 'GFS Didot', Georgia, "Times New Roman", serif;
-    font-size: 2.4rem;
-    line-height: 1.05;
-}
-
-
-h1, h2, h3 {
-    margin: 0 0 16px;
-    letter-spacing: 0.02em;
-    color: var(--text-color);
-}
-
-h1 {
-    font-size: clamp(2rem, 4vw, 4rem);
-}
-
-h2 {
-    font-size: clamp(1.2rem, 2.2vw, 2rem);
-    opacity: 0.88;
-}
-
-.panel {
-    position: relative;
-    width: 100%;
-    padding: 3rem 2rem;
-    background: rgba(0, 0, 0, 0.42);
-    border-radius: 24px;
-    backdrop-filter: blur(12px);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
-.panel {
-    color: var(--panel-text);
-}
-
 .map-container {
     margin-top: 24px;
-    background: rgba(255, 255, 255, 0.08);
+    background: transparent;
     border-radius: 14px;
     overflow: hidden;
-    backdrop-filter: blur(10px);
     width: 100%;
     max-width: 520px;
     margin-left: auto;
@@ -136,7 +221,7 @@ iframe {
 .map-container h3 {
     margin: 0 0 8px;
     color: var(--text-color);
-    font-family: 'GFS Didot', Georgia, "Times New Roman", serif;
+    font-family: 'GFS Didot', Georgia, 'Times New Roman', serif;
     font-size: 1.15rem;
     line-height: 1.05;
     text-align: center;
@@ -160,11 +245,23 @@ iframe {
 
 @media (max-width: 800px) {
     section {
-        min-height: 80vh;
+        min-height: auto;
+        height: auto;
+        padding: 4rem 0;
     }
 
-    .panel {
-        padding: 2rem;
-        border-radius: 18px;
+    .text-content {
+        padding: 1.4rem 1.2rem;
+        margin: 0 0.85rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .text-content h1 {
+        font-size: clamp(2rem, 9vw, 3.6rem);
+    }
+
+    .text-content {
+        padding: 1.25rem;
     }
 }
