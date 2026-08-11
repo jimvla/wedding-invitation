@@ -43,7 +43,7 @@ main::before {
     height: 70vw;
     z-index: 0;
     pointer-events: none;
-    background-image: url('https://raw.githubusercontent.com/jimvla/wedding-invitation/main/_images/floral.png');
+    background-image: url('https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/floral.png');
     background-size: contain;
     background-repeat: no-repeat;
     transform: rotate(165deg);
