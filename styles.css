@@ -265,3 +265,13 @@ iframe {
         padding: 1.25rem;
     }
 }
+
+@media (max-width: 420px) {
+    .text-content h1 {
+        font-size: clamp(2rem, 9vw, 3.6rem);
+    }
+
+    .text-content {
+        padding: 1.25rem;
+    }
+}
