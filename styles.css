@@ -239,6 +239,43 @@ section {
     color: #f5f1e9;
 }
 
+.contact-phones {
+    display: flex;
+    justify-content: center;
+    gap: 3rem; /* Κενό ανάμεσα στα δύο τηλέφωνα */
+    margin: 1.5rem 0;
+}
+
+.contact-person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-person a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+}
+
+.contact-person .muted {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-variant: normal; /* Απενεργοποιεί τα μικρά κεφαλαία */
+    font-size: 1.3rem;
+    letter-spacing: 0.02em; /* Επαναφέρει το φυσιολογικό κενό */
+    color: var(--accent);
+}
+
+/* Για να μπαίνουν το ένα κάτω από το άλλο σε πολύ μικρές οθόνες */
+@media (max-width: 420px) {
+    .contact-phones {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
 .content.location-content {
     background: transparent;
     padding: 1.5rem 1rem;
@@ -264,10 +301,12 @@ iframe {
 }
 
 .map-container h3 {
-    margin: 0 0 8px;
-    color: var(--text-color);
-    font-family: 'GFS Didot', Georgia, 'Times New Roman', serif;
-    font-size: 1.15rem;
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 500;
     line-height: 1.05;
     text-align: center;
 }
