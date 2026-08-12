@@ -12,7 +12,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Γάμος Δημήτρη & Μαρίας">
     <meta property="og:description" content="Σάββατο 26 Σεπτεμβρίου 2026, 18:00 — Ιερός Ναός Αγίου Γεωργίου, Αετός, Φλώρινα">
-    <meta property="og:image" content="https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/floral.png">
+    <meta property="og:image" content="https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/page1.png">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Γάμος Δημήτρη & Μαρίας">
@@ -25,8 +25,12 @@
     <main>
 
     <!-- Σελίδα 1: Εισαγωγή -->
-    <section> 
-        <div class="content text-content"> 
+    <section id="page-hero" class="reveal-section">
+        <!-- Optional: drop a photo of the two of you here for a soft full-bleed backdrop.
+             Uncomment and set the src once you have an image hosted (e.g. in your repo's _images folder):
+        <div class="hero-photo" style="background-image:url('_images/couple.jpg');"></div>
+        -->
+        <div class="content text-content reveal-target">
             <h1 class="names-block">
                 <span class="name-line">Δημήτρης</span>
                 <span class="name-line amp">&amp;</span>
@@ -34,13 +38,18 @@
             </h1>
             <p class="date">Σάββατο 26 Σεπτεμβρίου 18:00</p>
             <p class="venue">Ιερός Ναός Αγίου Γεωργίου, Αετός, Φλώρινα</p>
-        </div> 
+            <div class="countdown" id="countdown" aria-live="polite">
+                <div class="countdown-item"><span class="countdown-num" data-unit="days">00</span><span class="countdown-label">ημέρες</span></div>
+                <div class="countdown-item"><span class="countdown-num" data-unit="hours">00</span><span class="countdown-label">ώρες</span></div>
+                <div class="countdown-item"><span class="countdown-num" data-unit="minutes">00</span><span class="countdown-label">λεπτά</span></div>
+            </div>
+        </div>
     </section>
 
     <!-- Σελίδα 2: Λεπτομέρειες -->
-    <section> 
+    <section id="page-details" class="reveal-section">
 
-        <div class="content text-content">
+        <div class="content text-content reveal-target">
             <p>Θα χαρούμε να παρευρεθείτε στο γάμο μας το Σάββατο 26 Σεπτεμβρίου στις 18:00 στον Ιερό Ναό Αγίου Γεωργίου στον Αετό Φλώρινας.</p>
             <hr class="section-divider">
             <div class="family-group">
@@ -69,8 +78,8 @@
     </section>
 
     <!-- Σελίδα 3: Τοποθεσία Μυστηρίου -->
-    <section>
-        <div class="content location-content">
+    <section id="page-ceremony" class="reveal-section">
+        <div class="content location-content reveal-target">
             <div class="map-container">
                 <h3>Τοποθεσία Μυστηρίου</h3>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3026.5775554117613!2d21.54932487746202!3d40.66124167140144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x135769002025853d%3A0xc2af8d8899106029!2zzpnOtc-Bz4zPgiDOnc6xz4zPgiDOkc6zzq_Ov8-FIM6TzrXPic-BzrPOr86_z4UsIM6RzrXPhM-Mz4I!5e0!3m2!1sel!2sgr!4v1786450552869!5m2!1sel!2sgr" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -79,8 +88,8 @@
     </section>
 
     <!-- Σελίδα 4: Τοποθεσία Δεξίωσης -->
-    <section>
-        <div class="content location-content">
+    <section id="page-reception" class="reveal-section">
+        <div class="content location-content reveal-target">
             <div class="map-container">
                 <h3>Τοποθεσία Δεξίωσης</h3>
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3031.6975035644036!2d21.666709977459014!3d40.54827177141888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13577ce9659e2363%3A0x51809c080eb1069a!2sIoannou%20Resort%20Hotel!5e0!3m2!1sel!2sgr!4v1786450611040!5m2!1sel!2sgr" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
@@ -90,5 +99,14 @@
 
     </main>
 
+    <!-- Πλοήγηση σελίδων (κουκκίδες) -->
+    <nav class="page-dots" aria-label="Πλοήγηση σελίδων">
+        <a href="#page-hero" class="dot" data-target="page-hero" aria-label="Εισαγωγή"></a>
+        <a href="#page-details" class="dot" data-target="page-details" aria-label="Λεπτομέρειες"></a>
+        <a href="#page-ceremony" class="dot" data-target="page-ceremony" aria-label="Τοποθεσία Μυστηρίου"></a>
+        <a href="#page-reception" class="dot" data-target="page-reception" aria-label="Τοποθεσία Δεξίωσης"></a>
+    </nav>
+
+    <script src="script.js"></script>
 </body>
 </html>
