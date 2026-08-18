@@ -1,0 +1,11 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Dimitris and Maria Wedding//GR
+BEGIN:VEVENT
+DTSTART:20260926T150000Z
+DTEND:20260926T160000Z
+SUMMARY:Γάμος Δημήτρη & Μαρίας
+LOCATION:Ιερός Ναός Αγίου Γεωργίου, Αετός, Φλώρινα
+DESCRIPTION:Θα ακολουθήσει δεξίωση στο Ioannou Resort, Πτολεμαΐδα.
+END:VEVENT
+END:VCALENDAR

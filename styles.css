@@ -39,15 +39,16 @@ main::before {
     position: fixed;
     left: -30vw;
     top: -8vh;
-    width: 70vw;
-    height: 70vw;
+    width: 80vw;
+    height: 80vw;
     z-index: 0;
     pointer-events: none;
     background-image: url('https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/floral.png');
     background-size: contain;
     background-repeat: no-repeat;
-    transform: rotate(165deg);
-    opacity: 0.22;
+    transform: rotate(165deg) translateY(calc(var(--scrollY, 0) * 0.06px));
+    opacity: 0.33;
+    transition: transform 0.1s linear;
 }
 
 section {
@@ -70,7 +71,25 @@ section {
     width: 100%;
     max-width: 1080px;
     padding: 28px;
-    animation: fadeInUp 1.5s ease;
+}
+
+.reveal-target {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal-target.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-target {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
 }
 
 .text-content {
@@ -220,6 +239,43 @@ section {
     color: #f5f1e9;
 }
 
+.contact-phones {
+    display: flex;
+    justify-content: center;
+    gap: 3rem; /* Κενό ανάμεσα στα δύο τηλέφωνα */
+    margin: 1.5rem 0;
+}
+
+.contact-person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-person a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+}
+
+.contact-person .muted {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-variant: normal; /* Απενεργοποιεί τα μικρά κεφαλαία */
+    font-size: 1.3rem;
+    letter-spacing: 0.02em; /* Επαναφέρει το φυσιολογικό κενό */
+    color: var(--accent);
+}
+
+/* Για να μπαίνουν το ένα κάτω από το άλλο σε πολύ μικρές οθόνες */
+@media (max-width: 420px) {
+    .contact-phones {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
 .content.location-content {
     background: transparent;
     padding: 1.5rem 1rem;
@@ -245,30 +301,32 @@ iframe {
 }
 
 .map-container h3 {
-    margin: 0 0 8px;
-    color: var(--text-color);
-    font-family: 'GFS Didot', Georgia, 'Times New Roman', serif;
-    font-size: 1.15rem;
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 500;
     line-height: 1.05;
     text-align: center;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(24px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 @media (max-width: 800px) {
+    /* ΝΕΟΣ ΚΩΔΙΚΑΣ: Απενεργοποίηση του scroll snapping στα κινητά */
+    body {
+        scroll-snap-type: none;
+    }
+    
     section {
         min-height: auto;
         height: auto;
         padding: 4rem 0;
+    }
+
+    /* ΝΕΟΣ ΚΩΔΙΚΑΣ: Κρατάει την 1η οθόνη στο 100% του ύψους της συσκευής */
+    section:first-of-type {
+        min-height: 100dvh; 
+        height: 100dvh;
     }
 
     .text-content {
@@ -295,4 +353,82 @@ iframe {
     .text-content {
         padding: 1.25rem;
     }
+}
+
+/* ---------- Countdown ---------- */
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.6rem;
+    margin-top: 2rem;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 3.2rem;
+}
+
+.countdown-num {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: var(--accent);
+    line-height: 1;
+}
+
+.countdown-label {
+    margin-top: 0.35rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-variant: small-caps;
+}
+
+/* ---------- Page navigation dots ---------- */
+.page-dots {
+    position: fixed;
+    right: 1.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    z-index: 5;
+}
+
+.page-dots .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: transparent;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.page-dots .dot.active {
+    background: var(--accent);
+    transform: scale(1.25);
+}
+
+.page-dots .dot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+    .page-dots {
+        display: none;
+    }
+}
+
+/* ---------- Optional hero photo backdrop ----------
+   Uncomment the .hero-photo div in index.html and set its background-image to use this. */
+.hero-photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.16;
+    z-index: 0;
 }
