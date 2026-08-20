@@ -77,7 +77,7 @@
   /* ---------- Countdown to the wedding ---------- */
   var countdownEl = document.getElementById("countdown");
   if (countdownEl) {
-    var weddingDate = new Date("2026-09-26T18:00:00+03:00").getTime();
+    var weddingDate = new Date("2026-08-20T16:45:00+03:00").getTime();
     var daysEl = countdownEl.querySelector('[data-unit="days"]');
     var hoursEl = countdownEl.querySelector('[data-unit="hours"]');
     var minsEl = countdownEl.querySelector('[data-unit="minutes"]');
@@ -87,7 +87,20 @@
       var diff = weddingDate - now;
 
       if (diff <= 0) {
+        // Εξαφανίζουμε το countdown και εμφανίζουμε ΜΟΝΟ την εικόνα
+        var parentSection = countdownEl.parentElement;
         countdownEl.style.display = "none";
+
+        var postWeddingImage = document.getElementById("post-wedding-image");
+        if (!postWeddingImage) {
+          postWeddingImage = document.createElement("div");
+          postWeddingImage.id = "post-wedding-image";
+          postWeddingImage.className = "post-wedding-container";
+          postWeddingImage.innerHTML = `
+            <img src="_images/wedding-couple.gif" alt="Wedding Couple" class="wedding-gif" />
+          `;
+          parentSection.appendChild(postWeddingImage);
+        }
         return;
       }
 
@@ -95,9 +108,9 @@
       var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       var mins = Math.floor((diff / (1000 * 60)) % 60);
 
-      daysEl.textContent = days;
-      hoursEl.textContent = String(hours).padStart(2, "0");
-      minsEl.textContent = String(mins).padStart(2, "0");
+      if (daysEl) daysEl.textContent = days;
+      if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
+      if (minsEl) minsEl.textContent = String(mins).padStart(2, "0");
     }
 
     updateCountdown();
