@@ -106,12 +106,17 @@ document.querySelectorAll('.reveal-target').forEach(el => {
 
 
 window.addEventListener('load', () => {
-    if (window.location.hash) {
-        const targetElement = document.querySelector(window.location.hash);
+    if (window.location.hash === '#page-upload') {
+        const targetElement = document.getElementById('page-upload');
         if (targetElement) {
+            // Απενεργοποίηση snap για να πάει ακριβώς εκεί
+            document.body.style.scrollSnapType = 'none';
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            
+            // Επαναφορά του snap μετά την ολοκλήρωση του scroll
             setTimeout(() => {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-            }, 300); // 300ms καθυστέρηση για να προλάβει να «καθίσει» το layout
+                document.body.style.scrollSnapType = '';
+            }, 1000);
         }
     }
 });
