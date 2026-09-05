@@ -74,6 +74,69 @@
     );
   }
 
+
+document.getElementById('photoInput').addEventListener('change', function() {
+    const fileText = document.getElementById('fileChosenText');
+    if (this.files.length > 0) {
+        fileText.textContent = this.files.length === 1 
+            ? 'Επιλέχθηκε 1 αρχείο' 
+            : `Επιλέχθηκαν ${this.files.length} αρχεία`;
+        fileText.style.color = 'var(--accent)';
+    } else {
+        fileText.textContent = 'Επιλέξτε φωτογραφίες γάμου...';
+        fileText.style.color = 'var(--muted)';
+    }
+});
+
+
+document.getElementById('uploadBtn').addEventListener('click', async function() {
+    const fileInput = document.getElementById('photoInput');
+    const files = fileInput.files;
+    if (files.length === 0) return;
+
+    // Το νέο endpoint του API σου που δέχεται απευθείας το αρχείο
+    const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
+    //const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
+
+    let uploadedCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        try {
+            // Φτιάχνουμε το FormData για να στείλουμε το αρχείο σαν IFormFile
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const uploadRes = await fetch(API_URL, {
+                method: 'POST',
+                // Προσοχή: Δεν βάζουμε headers με 'Content-Type', το FormData το χειρίζεται αυτόματα
+                body: formData 
+            });
+
+            if (!uploadRes.ok) {
+                const err = await uploadRes.json();
+                alert(`Σφάλμα στο αρχείο ${file.name}: ${err.error || 'Αποτυχία upload'}`);
+                continue;
+            }
+
+            const result = await uploadRes.json();
+            console.log(`Η φωτογραφία ${file.name} ανέβηκε επιτυχώς ως ${result.fileName}!`);
+            uploadedCount++;
+
+        } catch (error) {
+            console.error('Σφάλμα:', error);
+            alert(`Πρόβλημα σύνδεσης για το αρχείο ${file.name}.`);
+            break;
+        }
+    }
+
+    if (uploadedCount > 0) {
+        alert(`Επιτυχία! Ανέβηκαν ${uploadedCount} από τις ${files.length} φωτογραφίες.`);
+        fileInput.value = ''; 
+    }
+});
+
+
   /* ---------- Countdown to the wedding ---------- */
   var countdownEl = document.getElementById("countdown");
   if (countdownEl) {
