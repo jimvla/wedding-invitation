@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ανέβασμα Φωτογραφιών | Γάμος Δημήτρη & Μαρίας</title>
+
+    <link rel="icon" href="https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/favicon.svg" type="image/svg+xml">
+
+    <meta name="description" content="Μοιραστείτε τις φωτογραφίες σας από το γάμο του Δημήτρη & της Μαρίας.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Φωτογραφίες Γάμου | Δημήτρης & Μαρία">
+    <meta property="og:description" content="Μοιραστείτε τις φωτογραφίες σας από το γάμο μας.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/jimvla/wedding-invitation/production/main/_images/page1.png">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main>
+        <section id="page-upload" class="reveal-section">
+            <div class="content text-content reveal-target">
+                <h2>Φωτογραφίες Γάμου</h2>
+                <p>Θα χαρούμε να μοιραστείτε μαζί μας τις φωτογραφίες σας από το γάμο μας!</p>
+                <p>Μπορείτε να τις ανεβάσετε απευθείας εδώ.</p>
+
+                <div class="upload-section-container">
+                    <div class="file-upload-wrapper">
+                        <span class="file-upload-text" id="fileChosenText">Επιλέξτε φωτογραφίες ...</span>
+                        <input type="file" id="photoInput" multiple accept="image/*">
+                    </div>
+                    <!-- Η μπάρα προόδου (κρυφή αρχικά) -->
+                    <div class="upload-progress-container" id="uploadProgressContainer" style="display: none;">
+                        <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                    </div>
+                    <button id="uploadBtn" class="upload-action-btn">Μεταφόρτωση</button>
+                    <div id="uploadStatus" class="upload-status"></div>
+                </div>
+
+                <hr class="section-divider">
+                <p><a class="calendar-btn" href="index.html">‹ Επιστροφή στην πρόσκληση</a></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="upload.js"></script>
+</body>
+</html>

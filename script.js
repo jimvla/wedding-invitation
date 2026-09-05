@@ -75,20 +75,6 @@
   }
 
 
-document.getElementById('photoInput').addEventListener('change', function() {
-    const fileText = document.getElementById('fileChosenText');
-    if (this.files.length > 0) {
-        fileText.textContent = this.files.length === 1 
-            ? 'Επιλέχθηκε 1 αρχείο' 
-            : `Επιλέχθηκαν ${this.files.length} αρχεία`;
-        fileText.style.color = 'var(--accent)';
-    } else {
-        fileText.textContent = 'Επιλέξτε φωτογραφίες γάμου...';
-        fileText.style.color = 'var(--muted)';
-    }
-});
-
-
 const observer = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -102,95 +88,6 @@ const observer = new IntersectionObserver((entries, observer) => {
 
 document.querySelectorAll('.reveal-target').forEach(el => {
     observer.observe(el);
-});
-
-
-window.addEventListener('load', () => {
-    if (window.location.hash === '#page-upload') {
-        const targetElement = document.getElementById('page-upload');
-        if (targetElement) {
-            // Απενεργοποίηση snap για να πάει ακριβώς εκεί
-            document.body.style.scrollSnapType = 'none';
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-            
-            // Επαναφορά του snap μετά την ολοκλήρωση του scroll
-            setTimeout(() => {
-                document.body.style.scrollSnapType = '';
-            }, 1000);
-        }
-    }
-});
-
-
-document.getElementById('uploadBtn').addEventListener('click', async function() {
-    const fileInput = document.getElementById('photoInput');
-    const files = fileInput.files;
-    const statusDiv = document.getElementById('uploadStatus');
-    const progressContainer = document.getElementById('uploadProgressContainer');
-    const progressBar = document.getElementById('uploadProgressBar');
-    
-    statusDiv.textContent = '';
-    statusDiv.className = 'upload-status';
-
-    if (files.length === 0) return;
-
-    const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
-    //const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
-
-    const uploadBtn = this;
-    const originalText = uploadBtn.textContent;
-    
-    uploadBtn.disabled = true;
-    uploadBtn.innerHTML = '<span class="spinner"></span> Μεταφόρτωση...';
-    
-    progressContainer.style.display = 'block';
-    progressBar.style.width = '0%';
-
-    let uploadedCount = 0;
-
-    try {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const uploadRes = await fetch(API_URL, {
-                method: 'POST',
-                body: formData 
-            });
-
-            if (!uploadRes.ok) {
-                const err = await uploadRes.json();
-                throw new Error(err.error || `Αποτυχία στο αρχείο ${file.name}`);
-            }
-
-            uploadedCount++;
-            
-            // Ενημέρωση μπάρας προόδου βάσει των αρχείων που ανέβηκαν
-            const progressPercent = ((i + 1) / files.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-        }
-
-        statusDiv.textContent = `Επιτυχία! Ανέβηκαν ${uploadedCount} φωτογραφίες. Σας ευχαριστούμε!`;
-        statusDiv.className = 'upload-status success';
-        fileInput.value = '';
-        document.getElementById('fileChosenText').textContent = 'Επιλέξτε φωτογραφίες γάμου...';
-        document.getElementById('fileChosenText').style.color = 'var(--muted)';
-
-    } catch (error) {
-        console.error('Σφάλμα:', error);
-        statusDiv.textContent = error.message || 'Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.';
-        statusDiv.className = 'upload-status error';
-    } finally {
-        uploadBtn.disabled = false;
-        uploadBtn.textContent = originalText;
-        
-        // Απόκρυψη της μπάρας μετά από λίγο
-        setTimeout(() => {
-            progressContainer.style.display = 'none';
-            progressBar.style.width = '0%';
-        }, 1500);
-    }
 });
 
 
