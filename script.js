@@ -94,22 +94,26 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
     const files = fileInput.files;
     if (files.length === 0) return;
 
-    // Το νέο endpoint του API σου που δέχεται απευθείας το αρχείο
     const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
     //const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
 
+    const uploadBtn = this;
+    const originalText = uploadBtn.textContent;
+    
+    // Ενεργοποίηση loading state
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = '<span class="spinner"></span> Μεταφόρτωση...';
+
     let uploadedCount = 0;
 
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        try {
-            // Φτιάχνουμε το FormData για να στείλουμε το αρχείο σαν IFormFile
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
             const formData = new FormData();
             formData.append("file", file);
 
             const uploadRes = await fetch(API_URL, {
                 method: 'POST',
-                // Προσοχή: Δεν βάζουμε headers με 'Content-Type', το FormData το χειρίζεται αυτόματα
                 body: formData 
             });
 
@@ -120,19 +124,28 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
             }
 
             const result = await uploadRes.json();
-            console.log(`Η φωτογραφία ${file.name} ανέβηκε επιτυχώς ως ${result.fileName}!`);
             uploadedCount++;
-
-        } catch (error) {
-            console.error('Σφάλμα:', error);
-            alert(`Πρόβλημα σύνδεσης για το αρχείο ${file.name}.`);
-            break;
         }
-    }
 
-    if (uploadedCount > 0) {
-        alert(`Επιτυχία! Ανέβηκαν ${uploadedCount} από τις ${files.length} φωτογραφίες.`);
-        fileInput.value = ''; 
+        if (uploadedCount > 0) {
+            alert(`Επιτυχία! Ανέβηκαν ${uploadedCount} από τις ${files.length} φωτογραφίες.`);
+            fileInput.value = '';
+            document.getElementById('fileChosenText').textContent = 'Επιλέξτε φωτογραφίες γάμου...';
+            document.getElementById('fileChosenText').style.color = 'var(--muted)';
+        }
+
+    } catch (error) {
+        console.error('Σφάλμα:', error);
+        alert('Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.');
+    } finally {
+        // Επαναφορά κουμπιού και input/κειμένου σε κάθε περίπτωση
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = originalText;
+        
+        fileInput.value = '';
+        const fileText = document.getElementById('fileChosenText');
+        fileText.textContent = 'Επιλέξτε φωτογραφίες γάμου...';
+        fileText.style.color = 'var(--muted)';
     }
 });
 
