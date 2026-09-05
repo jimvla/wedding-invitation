@@ -89,20 +89,45 @@ document.getElementById('photoInput').addEventListener('change', function() {
 });
 
 
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // <-- Σταματάει το flickering, μένει σταθερό!
+        }
+    });
+}, {
+    threshold: 0.15
+});
+
+document.querySelectorAll('.reveal-target').forEach(el => {
+    observer.observe(el);
+});
+
+
 document.getElementById('uploadBtn').addEventListener('click', async function() {
     const fileInput = document.getElementById('photoInput');
     const files = fileInput.files;
+    const statusDiv = document.getElementById('uploadStatus');
+    const progressContainer = document.getElementById('uploadProgressContainer');
+    const progressBar = document.getElementById('uploadProgressBar');
+    
+    statusDiv.textContent = '';
+    statusDiv.className = 'upload-status';
+
     if (files.length === 0) return;
 
-    const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
-    //const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
+    //const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
+    const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
 
     const uploadBtn = this;
     const originalText = uploadBtn.textContent;
     
-    // Ενεργοποίηση loading state
     uploadBtn.disabled = true;
     uploadBtn.innerHTML = '<span class="spinner"></span> Μεταφόρτωση...';
+    
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
 
     let uploadedCount = 0;
 
@@ -119,35 +144,38 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
 
             if (!uploadRes.ok) {
                 const err = await uploadRes.json();
-                alert(`Σφάλμα στο αρχείο ${file.name}: ${err.error || 'Αποτυχία upload'}`);
-                continue;
+                throw new Error(err.error || `Αποτυχία στο αρχείο ${file.name}`);
             }
 
-            const result = await uploadRes.json();
             uploadedCount++;
+            
+            // Ενημέρωση μπάρας προόδου βάσει των αρχείων που ανέβηκαν
+            const progressPercent = ((i + 1) / files.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
         }
 
-        if (uploadedCount > 0) {
-            alert(`Επιτυχία! Ανέβηκαν ${uploadedCount} από τις ${files.length} φωτογραφίες.`);
-            fileInput.value = '';
-            document.getElementById('fileChosenText').textContent = 'Επιλέξτε φωτογραφίες γάμου...';
-            document.getElementById('fileChosenText').style.color = 'var(--muted)';
-        }
+        statusDiv.textContent = `Επιτυχία! Ανέβηκαν ${uploadedCount} φωτογραφίες. Σας ευχαριστούμε!`;
+        statusDiv.className = 'upload-status success';
+        fileInput.value = '';
+        document.getElementById('fileChosenText').textContent = 'Επιλέξτε φωτογραφίες γάμου...';
+        document.getElementById('fileChosenText').style.color = 'var(--muted)';
 
     } catch (error) {
         console.error('Σφάλμα:', error);
-        alert('Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.');
+        statusDiv.textContent = error.message || 'Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.';
+        statusDiv.className = 'upload-status error';
     } finally {
-        // Επαναφορά κουμπιού και input/κειμένου σε κάθε περίπτωση
         uploadBtn.disabled = false;
         uploadBtn.textContent = originalText;
         
-        fileInput.value = '';
-        const fileText = document.getElementById('fileChosenText');
-        fileText.textContent = 'Επιλέξτε φωτογραφίες γάμου...';
-        fileText.style.color = 'var(--muted)';
+        // Απόκρυψη της μπάρας μετά από λίγο
+        setTimeout(() => {
+            progressContainer.style.display = 'none';
+            progressBar.style.width = '0%';
+        }, 1500);
     }
 });
+
 
 
   /* ---------- Countdown to the wedding ---------- */
