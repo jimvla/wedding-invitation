@@ -105,6 +105,18 @@ document.querySelectorAll('.reveal-target').forEach(el => {
 });
 
 
+window.addEventListener('load', () => {
+    if (window.location.hash) {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+            setTimeout(() => {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }, 300); // 300ms καθυστέρηση για να προλάβει να «καθίσει» το layout
+        }
+    }
+});
+
+
 document.getElementById('uploadBtn').addEventListener('click', async function() {
     const fileInput = document.getElementById('photoInput');
     const files = fileInput.files;
