@@ -70,8 +70,8 @@
 
     if (files.length === 0) return;
 
-    const API_URL = "https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo";
-    // const API_URL = "http://localhost:5041/api/upload-photo"; // Τοπικό endpoint για ανάπτυξη
+    const API_BASE = "https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net";
+    // const API_BASE = "http://localhost:5041"; // Τοπικό endpoint για ανάπτυξη
 
     const uploadBtn = this;
     const originalText = uploadBtn.textContent;
@@ -87,17 +87,35 @@
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const formData = new FormData();
-        formData.append("file", file);
 
-        const uploadRes = await fetch(API_URL, {
-          method: "POST",
-          body: formData
+        // 1) Ζήτα από το API ένα βραχύβιο SAS URL για ΑΥΤΟ το αρχείο.
+        //    Το API δεν βλέπει καθόλου τα bytes της φωτογραφίας εδώ.
+        const params = new URLSearchParams({
+          fileName: file.name,
+          contentType: file.type
         });
 
-        if (!uploadRes.ok) {
-          const err = await uploadRes.json();
-          throw new Error(err.error || `Αποτυχία στο αρχείο ${file.name}`);
+        const sasRes = await fetch(`${API_BASE}/api/upload-url?${params.toString()}`);
+
+        if (!sasRes.ok) {
+          const err = await sasRes.json().catch(() => ({}));
+          throw new Error(err.error || `Δεν εκδόθηκε άδεια μεταφόρτωσης για το αρχείο ${file.name}`);
+        }
+
+        const { uploadUrl } = await sasRes.json();
+
+        // 2) Ανέβασε το αρχείο ΑΠΕΥΘΕΙΑΣ στο Blob Storage με το SAS URL.
+        const putRes = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: {
+            "x-ms-blob-type": "BlockBlob",
+            "Content-Type": file.type
+          },
+          body: file
+        });
+
+        if (!putRes.ok) {
+          throw new Error(`Αποτυχία μεταφόρτωσης του αρχείου ${file.name}`);
         }
 
         uploadedCount++;
