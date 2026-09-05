@@ -117,8 +117,8 @@ document.getElementById('uploadBtn').addEventListener('click', async function() 
 
     if (files.length === 0) return;
 
-    //const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
-    const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
+    const API_URL = 'https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net/api/upload-photo';
+    //const API_URL = 'http://localhost:5041/api/upload-photo'; // Τοπικό endpoint για ανάπτυξη
 
     const uploadBtn = this;
     const originalText = uploadBtn.textContent;
