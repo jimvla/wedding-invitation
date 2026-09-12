@@ -2,6 +2,8 @@
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var API_BASE = "https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net";
+  //var API_BASE = "http://localhost:5041"; // Τοπικό endpoint για ανάπτυξη
 
   /* ---------- Scroll reveal (fade/scale in once) ---------- */
   var targets = document.querySelectorAll(".reveal-target");
@@ -70,9 +72,6 @@
 
     if (files.length === 0) return;
 
-    const API_BASE = "https://dimitris-maria-wedding-api-and6aefyd3aga7c9.italynorth-01.azurewebsites.net";
-    // const API_BASE = "http://localhost:5041"; // Τοπικό endpoint για ανάπτυξη
-
     const uploadBtn = this;
     const originalText = uploadBtn.textContent;
 
@@ -85,26 +84,33 @@
     let uploadedCount = 0;
 
     try {
+      // 1) ΕΝΑ request στο API για ΟΛΑ τα αρχεία μαζί.
+      //    Το API επιστρέφει ένα ξεχωριστό, βραχύβιο SAS URL ανά αρχείο
+      //    (κλειδωμένο στο συγκεκριμένο blob name του καθενός) — δεν βλέπει
+      //    καθόλου τα bytes της κάθε φωτογραφίας.
+      const fileList = Array.from(files).map((file) => ({
+        fileName: file.name,
+        contentType: file.type
+      }));
+
+      const sasRes = await fetch(`${API_BASE}/api/upload-urls`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fileList)
+      });
+
+      if (!sasRes.ok) {
+        const err = await sasRes.json().catch(() => ({}));
+        throw new Error(err.error || "Δεν εκδόθηκαν άδειες μεταφόρτωσης.");
+      }
+
+      const uploadTargets = await sasRes.json(); // [{ fileName, uploadUrl, blobName }, ...] στη σειρά που στάλθηκαν
+
+      // 2) Ανέβασε κάθε αρχείο ΑΠΕΥΘΕΙΑΣ στο Blob Storage με το δικό του SAS URL.
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        const { uploadUrl } = uploadTargets[i];
 
-        // 1) Ζήτα από το API ένα βραχύβιο SAS URL για ΑΥΤΟ το αρχείο.
-        //    Το API δεν βλέπει καθόλου τα bytes της φωτογραφίας εδώ.
-        const params = new URLSearchParams({
-          fileName: file.name,
-          contentType: file.type
-        });
-
-        const sasRes = await fetch(`${API_BASE}/api/upload-url?${params.toString()}`);
-
-        if (!sasRes.ok) {
-          const err = await sasRes.json().catch(() => ({}));
-          throw new Error(err.error || `Δεν εκδόθηκε άδεια μεταφόρτωσης για το αρχείο ${file.name}`);
-        }
-
-        const { uploadUrl } = await sasRes.json();
-
-        // 2) Ανέβασε το αρχείο ΑΠΕΥΘΕΙΑΣ στο Blob Storage με το SAS URL.
         const putRes = await fetch(uploadUrl, {
           method: "PUT",
           headers: {
@@ -132,7 +138,15 @@
 
     } catch (error) {
       console.error("Σφάλμα:", error);
-      statusDiv.textContent = error.message || "Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.";
+
+      // Το fetch() πετάει TypeError ("Failed to fetch" / "NetworkError...") όταν δεν
+      // μπορεί καν να συνδεθεί με τον server (offline, server down, CORS block κ.λπ.).
+      // Σε αυτή την περίπτωση δείχνουμε φιλικό μήνυμα αντί για το τεχνικό του browser.
+      const isNetworkFailure = error instanceof TypeError;
+
+      statusDiv.textContent = isNetworkFailure
+        ? "Δεν ήταν δυνατή η σύνδεση με τον διακομιστή. Ελέγξτε τη σύνδεσή σας στο internet και δοκιμάστε ξανά σε λίγο."
+        : (error.message || "Πρόβλημα σύνδεσης κατά τη μεταφόρτωση.");
       statusDiv.className = "upload-status error";
     } finally {
       uploadBtn.disabled = false;
