@@ -105,7 +105,8 @@ document.querySelectorAll('.reveal-target').forEach(el => {
       var diff = weddingDate - now;
 
       if (diff <= 0) {
-        countdownEl.style.display = "none";
+        countdownEl.remove();
+        clearInterval(countdownInterval);
         return;
       }
 
@@ -118,7 +119,8 @@ document.querySelectorAll('.reveal-target').forEach(el => {
       minsEl.textContent = String(mins).padStart(2, "0");
     }
 
+    var countdownInterval;
     updateCountdown();
-    setInterval(updateCountdown, 30000);
+    countdownInterval = setInterval(updateCountdown, 30000);
   }
 })();
