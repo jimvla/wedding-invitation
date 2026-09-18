@@ -74,6 +74,24 @@
     );
   }
 
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // <-- Σταματάει το flickering, μένει σταθερό!
+        }
+    });
+}, {
+    threshold: 0.15
+});
+
+document.querySelectorAll('.reveal-target').forEach(el => {
+    observer.observe(el);
+});
+
+
+
   /* ---------- Countdown to the wedding ---------- */
   var countdownEl = document.getElementById("countdown");
   if (countdownEl) {
@@ -87,7 +105,8 @@
       var diff = weddingDate - now;
 
       if (diff <= 0) {
-        countdownEl.style.display = "none";
+        countdownEl.remove();
+        clearInterval(countdownInterval);
         return;
       }
 
@@ -100,7 +119,8 @@
       minsEl.textContent = String(mins).padStart(2, "0");
     }
 
+    var countdownInterval;
     updateCountdown();
-    setInterval(updateCountdown, 30000);
+    countdownInterval = setInterval(updateCountdown, 30000);
   }
 })();
